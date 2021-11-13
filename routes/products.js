@@ -9,7 +9,7 @@ const upload = multer({ dest: "uploads/" });
 
 const bcrypt = require("bcrypt");
 
-const db = require("../db/db.js");
+const { db, runQuery } = require("../db/db.js");
 
 var jwt = require("jsonwebtoken");
 
@@ -27,45 +27,33 @@ async function uploadFile(path, filename) {
   return storage[0].metadata.mediaLink;
 }
 
-const getRow = (query, params) => {
-  return new Promise((resolve, reject) => {
-    db.query(query, params, (err, rows) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(rows);
-      }
-    });
-  });
-};
+router.get("/:id", async (req, res) => {
+  try {
+    var query_text =
+      "SELECT *\
+      from products \
+      where product_id = ?;";
 
-const insertRow = (query, params) => {
-  return new Promise((resolve, reject) => {
-    db.query(query, params, (err, result) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(result);
-      }
-    });
-  });
-};
+    var values = [req.params.id];
+
+    var products = await runQuery(query_text, values);
+    return res.status(201).json(products[0]);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
 
 router.put("/:id", upload.single("image"), async (req, res) => {
   try {
     var url = req.body.image_url;
     if (req.file) {
-      console.log("file found");
+      // console.log("file found");
       url = await uploadFile(
         req.file.path,
         req.file.filename + req.file.originalname
       );
     }
 
-    console.log("====================================");
-    console.log(req.file);
-    console.log("====================================");
-    console.log(url);
     var query_text =
       "UPDATE products \
       SET title = ?, description = ?, stock = ?, price = ?, buying_price = ?,unit = ?,image_url = ?\
@@ -82,7 +70,7 @@ router.put("/:id", upload.single("image"), async (req, res) => {
       req.params.id,
     ];
 
-    await insertRow(query_text, values);
+    await runQuery(query_text, values);
 
     query_text = "select *\
       from products\
@@ -90,7 +78,7 @@ router.put("/:id", upload.single("image"), async (req, res) => {
 
     values = [req.body.category_id];
 
-    var products = await getRow(query_text, values);
+    var products = await runQuery(query_text, values);
     return res.status(201).json(products);
   } catch (error) {
     res.status(500).json(error);
@@ -105,7 +93,7 @@ router.post("/:id/delete", async (req, res) => {
     var values = [req.params.id];
 
     var products;
-    await getRow(query_text, values);
+    await runQuery(query_text, values);
 
     console.log("====================================");
     console.log(req.body);
@@ -116,7 +104,7 @@ router.post("/:id/delete", async (req, res) => {
 
     values = [req.body.categoryId];
 
-    products = await getRow(query_text, values);
+    products = await runQuery(query_text, values);
     return res.status(201).json(products);
   } catch (error) {
     res.status(500).json(error);

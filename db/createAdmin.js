@@ -4,11 +4,6 @@ const db = require("./db.js");
 
 const createAdmin = async () => {
   try {
-    db.connect(function (err) {
-      if (err) throw err;
-      console.log("Database Connected!");
-    });
-
     var query_text =
       "INSERT INTO admins (username,password)\
       VALUES(?,?);";
@@ -29,7 +24,6 @@ const createAdmin = async () => {
     console.log(error);
     console.log("====================================");
   }
-  db.end();
 };
 
 createAdmin();

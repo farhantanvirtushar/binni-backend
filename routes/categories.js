@@ -10,11 +10,9 @@ const upload = multer({ dest: "uploads/" });
 
 const bcrypt = require("bcrypt");
 
-const db = require("../db/db.js");
+const { db, runQuery } = require("../db/db.js");
 
 var jwt = require("jsonwebtoken");
-
-const bodyParser = require("body-parser");
 
 const storageRef = require("../firebase/firabaseinit.js");
 
@@ -30,30 +28,6 @@ async function uploadFile(path, filename) {
   return storage[0].metadata.mediaLink;
 }
 
-const getRow = (query, params) => {
-  return new Promise((resolve, reject) => {
-    db.query(query, params, (err, rows) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(rows);
-      }
-    });
-  });
-};
-
-const insertRow = (query, params) => {
-  return new Promise((resolve, reject) => {
-    db.query(query, params, (err, result) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(result);
-      }
-    });
-  });
-};
-
 router.get("/", async (req, res) => {
   try {
     var query_text = "select *\
@@ -61,8 +35,24 @@ router.get("/", async (req, res) => {
 
     var values = [];
 
-    var categories = await getRow(query_text, values);
+    var categories = await runQuery(query_text, values);
     return res.status(201).json(categories);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+
+router.get("/:id", async (req, res) => {
+  try {
+    var query_text =
+      "select *\
+      from categories\
+      where category_id = ?;";
+
+    var values = [req.params.id];
+
+    var categories = await runQuery(query_text, values);
+    return res.status(201).json(categories[0]);
   } catch (error) {
     res.status(500).json(error);
   }
@@ -77,7 +67,7 @@ router.get("/:id/all", async (req, res) => {
 
     var values = [req.params.id];
 
-    var products = await getRow(query_text, values);
+    var products = await runQuery(query_text, values);
     return res.status(201).json(products);
   } catch (error) {
     res.status(500).json(error);
@@ -86,6 +76,9 @@ router.get("/:id/all", async (req, res) => {
 
 router.post("/new", upload.single("image"), async (req, res) => {
   try {
+    console.log("====================================");
+    console.log(req.file);
+    console.log("====================================");
     const url = await uploadFile(
       req.file.path,
       req.file.filename + req.file.originalname
@@ -96,14 +89,48 @@ router.post("/new", upload.single("image"), async (req, res) => {
 
     var values = [req.body.categoryName, url];
 
-    await insertRow(query_text, values);
+    await runQuery(query_text, values);
 
     query_text = "select *\
       from categories;";
 
     values = [];
 
-    var categories = await getRow(query_text, values);
+    var categories = await runQuery(query_text, values);
+    return res.status(201).json(categories);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+
+router.put("/:id", upload.single("image"), async (req, res) => {
+  try {
+    console.log("====================================");
+    console.log(req.file);
+    console.log("====================================");
+    var url = req.body.image_url;
+    if (req.file) {
+      // console.log("file found");
+      url = await uploadFile(
+        req.file.path,
+        req.file.filename + req.file.originalname
+      );
+    }
+    var query_text =
+      "UPDATE categories \
+      SET name = ?, category_image_url = ?\
+      where category_id = ?;";
+
+    var values = [req.body.categoryName, url, req.params.id];
+
+    await runQuery(query_text, values);
+
+    query_text = "select *\
+      from categories;";
+
+    values = [];
+
+    var categories = await runQuery(query_text, values);
     return res.status(201).json(categories);
   } catch (error) {
     res.status(500).json(error);
@@ -132,7 +159,7 @@ router.post("/:id/new", upload.single("image"), async (req, res) => {
       url,
     ];
 
-    await insertRow(query_text, values);
+    await runQuery(query_text, values);
 
     query_text = "select *\
       from products\
@@ -140,7 +167,7 @@ router.post("/:id/new", upload.single("image"), async (req, res) => {
 
     values = [req.params.id];
 
-    var products = await getRow(query_text, values);
+    var products = await runQuery(query_text, values);
     return res.status(201).json(products);
   } catch (error) {
     res.status(500).json(error);
