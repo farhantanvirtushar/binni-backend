@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
 
-const db = require("./db.js");
+const { db, runQuery } = require("./db.js");
 
 const createAdmin = async () => {
   try {
@@ -12,13 +12,7 @@ const createAdmin = async () => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(values[1], salt);
     values[1] = hashedPassword;
-    db.query(query_text, values, (err, reslut) => {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log("admin created " + reslut);
-      }
-    });
+    await runQuery(query_text, values);
   } catch (error) {
     console.log("====================================");
     console.log(error);
