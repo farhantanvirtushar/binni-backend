@@ -36,9 +36,12 @@ router.get("/", async (req, res) => {
     var values = [];
 
     var categories = await runQuery(query_text, values);
-    return res.status(201).json(categories);
+    return res
+      .header("Access-Control-Allow-Origin", "*")
+      .status(201)
+      .json(categories);
   } catch (error) {
-    res.status(500).json(error);
+    res.header("Access-Control-Allow-Origin", "*").status(500).json(error);
   }
 });
 
@@ -52,9 +55,12 @@ router.get("/:id", async (req, res) => {
     var values = [req.params.id];
 
     var categories = await runQuery(query_text, values);
-    return res.status(201).json(categories[0]);
+    return res
+      .header("Access-Control-Allow-Origin", "*")
+      .status(201)
+      .json(categories[0]);
   } catch (error) {
-    res.status(500).json(error);
+    res.header("Access-Control-Allow-Origin", "*").status(500).json(error);
   }
 });
 
@@ -68,9 +74,12 @@ router.get("/:id/all", async (req, res) => {
     var values = [req.params.id];
 
     var products = await runQuery(query_text, values);
-    return res.status(201).json(products);
+    return res
+      .header("Access-Control-Allow-Origin", "*")
+      .status(201)
+      .json(products);
   } catch (error) {
-    res.status(500).json(error);
+    res.header("Access-Control-Allow-Origin", "*").status(500).json(error);
   }
 });
 
@@ -97,9 +106,12 @@ router.post("/new", upload.single("image"), async (req, res) => {
     values = [];
 
     var categories = await runQuery(query_text, values);
-    return res.status(201).json(categories);
+    return res
+      .header("Access-Control-Allow-Origin", "*")
+      .status(201)
+      .json(categories);
   } catch (error) {
-    res.status(500).json(error);
+    res.header("Access-Control-Allow-Origin", "*").status(500).json(error);
   }
 });
 
@@ -131,9 +143,12 @@ router.put("/:id", upload.single("image"), async (req, res) => {
     values = [];
 
     var categories = await runQuery(query_text, values);
-    return res.status(201).json(categories);
+    return res
+      .header("Access-Control-Allow-Origin", "*")
+      .status(201)
+      .json(categories);
   } catch (error) {
-    res.status(500).json(error);
+    res.header("Access-Control-Allow-Origin", "*").status(500).json(error);
   }
 });
 
@@ -168,9 +183,12 @@ router.post("/:id/new", upload.single("image"), async (req, res) => {
     values = [req.params.id];
 
     var products = await runQuery(query_text, values);
-    return res.status(201).json(products);
+    return res
+      .header("Access-Control-Allow-Origin", "*")
+      .status(201)
+      .json(products);
   } catch (error) {
-    res.status(500).json(error);
+    res.header("Access-Control-Allow-Origin", "*").status(500).json(error);
   }
 });
 

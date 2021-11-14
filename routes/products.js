@@ -37,9 +37,12 @@ router.get("/:id", async (req, res) => {
     var values = [req.params.id];
 
     var products = await runQuery(query_text, values);
-    return res.status(201).json(products[0]);
+    return res
+      .header("Access-Control-Allow-Origin", "*")
+      .status(201)
+      .json(products[0]);
   } catch (error) {
-    res.status(500).json(error);
+    res.header("Access-Control-Allow-Origin", "*").status(500).json(error);
   }
 });
 
@@ -79,9 +82,12 @@ router.put("/:id", upload.single("image"), async (req, res) => {
     values = [req.body.category_id];
 
     var products = await runQuery(query_text, values);
-    return res.status(201).json(products);
+    return res
+      .header("Access-Control-Allow-Origin", "*")
+      .status(201)
+      .json(products);
   } catch (error) {
-    res.status(500).json(error);
+    res.header("Access-Control-Allow-Origin", "*").status(500).json(error);
   }
 });
 
@@ -105,9 +111,12 @@ router.post("/:id/delete", async (req, res) => {
     values = [req.body.categoryId];
 
     products = await runQuery(query_text, values);
-    return res.status(201).json(products);
+    return res
+      .header("Access-Control-Allow-Origin", "*")
+      .status(201)
+      .json(products);
   } catch (error) {
-    res.status(500).json(error);
+    res.header("Access-Control-Allow-Origin", "*").status(500).json(error);
   }
 });
 module.exports = router;
