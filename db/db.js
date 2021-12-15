@@ -1,6 +1,9 @@
 var mysql = require("mysql");
 
 var db = mysql.createPool({
+  connectTimeout: 60 * 60 * 1000,
+  acquireTimeout: 60 * 60 * 1000,
+  timeout: 60 * 60 * 1000,
   host: "bhd1j95jzvvqriwqsl0u-mysql.services.clever-cloud.com",
   port: 3306,
   user: "u1mrzzipdzd1kvub",

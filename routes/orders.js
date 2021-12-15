@@ -26,12 +26,9 @@ router.get("/", async (req, res) => {
 
     var orders = await runQuery(query_text, values);
 
-    return res
-      .header("Access-Control-Allow-Origin", "*")
-      .status(201)
-      .json(orders);
+    return res.status(201).json(orders);
   } catch (error) {
-    res.header("Access-Control-Allow-Origin", "*").status(500).json(error);
+    res.status(500).json(error);
   }
 });
 router.get("/:id/details", async (req, res) => {
@@ -48,12 +45,9 @@ router.get("/:id/details", async (req, res) => {
 
     var ordered_items = await runQuery(query_text, values);
 
-    return res
-      .header("Access-Control-Allow-Origin", "*")
-      .status(201)
-      .json(ordered_items);
+    return res.status(201).json(ordered_items);
   } catch (error) {
-    res.header("Access-Control-Allow-Origin", "*").status(500).json(error);
+    res.status(500).json(error);
   }
 });
 router.post("/new", async (req, res) => {
@@ -90,12 +84,9 @@ router.post("/new", async (req, res) => {
     console.log(values);
     console.log("====================================");
     await runQuery(query_text, values);
-    return res
-      .header("Access-Control-Allow-Origin", "*")
-      .status(201)
-      .json({ msg: "order recieved" });
+    return res.status(201).json({ msg: "order recieved" });
   } catch (error) {
-    res.header("Access-Control-Allow-Origin", "*").status(500).json(error);
+    res.status(500).json(error);
   }
 });
 

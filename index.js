@@ -6,6 +6,7 @@ const morgan = require("morgan");
 const helmet = require("helmet");
 
 const authRouter = require("./routes/auth.js");
+const departmentRouter = require("./routes/departments.js");
 const categoryRouter = require("./routes/categories.js");
 const productRouter = require("./routes/products.js");
 const orderRouter = require("./routes/orders.js");
@@ -47,6 +48,7 @@ app.use(function (req, res, next) {
 });
 
 app.use("/api/auth/", authRouter);
+app.use("/api/departments/", departmentRouter);
 app.use("/api/categories/", categoryRouter);
 app.use("/api/products/", productRouter);
 app.use("/api/orders/", orderRouter);

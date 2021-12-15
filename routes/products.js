@@ -37,12 +37,9 @@ router.get("/:id", async (req, res) => {
     var values = [req.params.id];
 
     var products = await runQuery(query_text, values);
-    return res
-      .header("Access-Control-Allow-Origin", "*")
-      .status(201)
-      .json(products[0]);
+    return res.status(201).json(products[0]);
   } catch (error) {
-    res.header("Access-Control-Allow-Origin", "*").status(500).json(error);
+    res.status(500).json(error);
   }
 });
 
@@ -59,12 +56,13 @@ router.put("/:id", upload.single("image"), async (req, res) => {
 
     var query_text =
       "UPDATE products \
-      SET title = ?, description = ?, stock = ?, price = ?, buying_price = ?,unit = ?,image_url = ?\
+      SET title = ?, description = ?, code = ?, stock = ?, price = ?, buying_price = ?,unit = ?,image_url = ?\
       where product_id = ?;";
 
     var values = [
       req.body.title,
       req.body.description,
+      req.body.code,
       req.body.stock,
       req.body.price,
       req.body.buying_price,
@@ -82,12 +80,9 @@ router.put("/:id", upload.single("image"), async (req, res) => {
     values = [req.body.category_id];
 
     var products = await runQuery(query_text, values);
-    return res
-      .header("Access-Control-Allow-Origin", "*")
-      .status(201)
-      .json(products);
+    return res.status(201).json(products);
   } catch (error) {
-    res.header("Access-Control-Allow-Origin", "*").status(500).json(error);
+    res.status(500).json(error);
   }
 });
 
@@ -98,12 +93,13 @@ router.post("/:id/delete", async (req, res) => {
 
     var values = [req.params.id];
 
-    var products;
-    await runQuery(query_text, values);
-
     console.log("====================================");
     console.log(req.body);
     console.log("====================================");
+
+    var products;
+    await runQuery(query_text, values);
+
     query_text = "select *\
       from products\
       where category_id = ?;";
@@ -111,12 +107,9 @@ router.post("/:id/delete", async (req, res) => {
     values = [req.body.categoryId];
 
     products = await runQuery(query_text, values);
-    return res
-      .header("Access-Control-Allow-Origin", "*")
-      .status(201)
-      .json(products);
+    return res.status(201).json(products);
   } catch (error) {
-    res.header("Access-Control-Allow-Origin", "*").status(500).json(error);
+    res.status(500).json(error);
   }
 });
 module.exports = router;

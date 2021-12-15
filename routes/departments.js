@@ -8,8 +8,6 @@ const { v4: uuidv4 } = require("uuid");
 var multer = require("multer");
 const upload = multer({ dest: "uploads/" });
 
-const bcrypt = require("bcrypt");
-
 const { db, runQuery } = require("../db/db.js");
 
 var jwt = require("jsonwebtoken");
@@ -31,31 +29,12 @@ async function uploadFile(path, filename) {
 router.get("/", async (req, res) => {
   try {
     var query_text = "select *\
-      from categories;";
+      from departments;";
 
     var values = [];
 
-    var categories = await runQuery(query_text, values);
-    return res.status(201).json(categories);
-  } catch (error) {
-    res.status(500).json(error);
-  }
-});
-
-router.get("/department/:id", async (req, res) => {
-  try {
-    var query_text =
-      "select *\
-      from categories\
-      where department_id = ?;";
-
-    var values = [req.params.id];
-
-    var categories = await runQuery(query_text, values);
-    console.log("====================================");
-    console.log(categories);
-    console.log("====================================");
-    return res.status(201).json(categories);
+    var departments = await runQuery(query_text, values);
+    return res.status(201).json(departments);
   } catch (error) {
     res.status(500).json(error);
   }
@@ -65,13 +44,13 @@ router.get("/:id", async (req, res) => {
   try {
     var query_text =
       "select *\
-      from categories\
-      where category_id = ?;";
+      from departments\
+      where department_id = ?;";
 
     var values = [req.params.id];
 
-    var categories = await runQuery(query_text, values);
-    return res.status(201).json(categories[0]);
+    var departments = await runQuery(query_text, values);
+    return res.status(201).json(departments[0]);
   } catch (error) {
     res.status(500).json(error);
   }
@@ -81,13 +60,13 @@ router.get("/:id/all", async (req, res) => {
   try {
     var query_text =
       "select *\
-      from products\
-      where category_id = ? ;";
+      from departments\
+      where department_id = ? ;";
 
     var values = [req.params.id];
 
-    var products = await runQuery(query_text, values);
-    return res.status(201).json(products);
+    var departments = await runQuery(query_text, values);
+    return res.status(201).json(departments);
   } catch (error) {
     res.status(500).json(error);
   }
@@ -95,9 +74,6 @@ router.get("/:id/all", async (req, res) => {
 
 router.post("/new", upload.single("image"), async (req, res) => {
   try {
-    console.log("====================================");
-    console.log(req.file);
-    console.log("====================================");
     var url = "";
     if (req.file) {
       // console.log("file found");
@@ -108,20 +84,20 @@ router.post("/new", upload.single("image"), async (req, res) => {
     }
 
     var query_text =
-      "INSERT INTO categories (name,category_image_url,department_id)\
-      VALUES(?,?,?);";
+      "INSERT INTO departments (name,department_image_url)\
+      VALUES(?,?);";
 
-    var values = [req.body.categoryName, url, req.body.departmentID];
+    var values = [req.body.departmentName, url];
 
     await runQuery(query_text, values);
 
     query_text = "select *\
-      from categories;";
+      from departments;";
 
     values = [];
 
-    var categories = await runQuery(query_text, values);
-    return res.status(201).json(categories);
+    var departments = await runQuery(query_text, values);
+    return res.status(201).json(departments);
   } catch (error) {
     res.status(500).json(error);
   }
@@ -129,6 +105,9 @@ router.post("/new", upload.single("image"), async (req, res) => {
 
 router.put("/:id", upload.single("image"), async (req, res) => {
   try {
+    console.log("====================================");
+    console.log(req.file);
+    console.log("====================================");
     var url = req.body.image_url;
     if (req.file) {
       // console.log("file found");
@@ -138,26 +117,21 @@ router.put("/:id", upload.single("image"), async (req, res) => {
       );
     }
     var query_text =
-      "UPDATE categories \
-      SET name = ?, category_image_url = ? , department_id = ?\
-      where category_id = ?;";
+      "UPDATE departments \
+      SET name = ?, department_image_url = ?\
+      where department_id = ?;";
 
-    var values = [
-      req.body.categoryName,
-      url,
-      req.body.departmentID,
-      req.params.id,
-    ];
+    var values = [req.body.departmentName, url, req.params.id];
 
     await runQuery(query_text, values);
 
     query_text = "select *\
-      from categories;";
+      from departments;";
 
     values = [];
 
-    var categories = await runQuery(query_text, values);
-    return res.status(201).json(categories);
+    var departments = await runQuery(query_text, values);
+    return res.status(201).json(departments);
   } catch (error) {
     res.status(500).json(error);
   }
@@ -165,23 +139,18 @@ router.put("/:id", upload.single("image"), async (req, res) => {
 
 router.post("/:id/new", upload.single("image"), async (req, res) => {
   try {
-    var url = "";
-    if (req.file) {
-      // console.log("file found");
-      url = await uploadFile(
-        req.file.path,
-        req.file.filename + req.file.originalname
-      );
-    }
+    const url = await uploadFile(
+      req.file.path,
+      req.file.filename + req.file.originalname
+    );
 
     var query_text =
-      "INSERT INTO products (title,description,code,stock,price,buying_price,unit,category_id,image_url)\
-      VALUES(?,?,?,?,?,?,?,?,?);";
+      "INSERT INTO products (title,description,stock,price,buying_price,unit,department_id,image_url)\
+      VALUES(?,?,?,?,?,?,?,?);";
 
     var values = [
       req.body.title,
       req.body.description,
-      req.body.code,
       req.body.stock,
       req.body.price,
       req.body.buying_price,
@@ -194,33 +163,12 @@ router.post("/:id/new", upload.single("image"), async (req, res) => {
 
     query_text = "select *\
       from products\
-      where category_id = ?;";
+      where department_id = ?;";
 
     values = [req.params.id];
 
     var products = await runQuery(query_text, values);
     return res.status(201).json(products);
-  } catch (error) {
-    res.status(500).json(error);
-  }
-});
-
-router.delete("/:id", async (req, res) => {
-  try {
-    var query_text = "DELETE from categories\
-      where category_id = ?;";
-
-    var values = [req.params.id];
-
-    var categories = await runQuery(query_text, values);
-
-    query_text = "select *\
-      from categories;";
-
-    values = [];
-
-    categories = await runQuery(query_text, values);
-    return res.status(201).json(categories);
   } catch (error) {
     res.status(500).json(error);
   }

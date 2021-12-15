@@ -24,17 +24,26 @@ const createTable = (query_text) =>
 const createTables = async () => {
   try {
     await createTable(
+      "CREATE TABLE IF NOT EXISTS departments (\
+        department_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,\
+        name VARCHAR(30)  NOT NULL,\
+        department_image_url VARCHAR(200)  NOT NULL);"
+    );
+    await createTable(
       "CREATE TABLE IF NOT EXISTS categories (\
         category_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,\
+        department_id INT UNSIGNED,\
         name VARCHAR(30)  NOT NULL,\
         category_image_url VARCHAR(200)  NOT NULL,\
-        parent INT  DEFAULT 0);"
+        FOREIGN KEY (department_id) REFERENCES departments(department_id)\
+        ON DELETE CASCADE);"
     );
 
     await createTable(
       "CREATE TABLE IF NOT EXISTS products (\
         product_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,\
         title VARCHAR(200)  NOT NULL,\
+        code VARCHAR(20)  NOT NULL,\
         image_url VARCHAR(200)  NOT NULL,\
         description VARCHAR(1500) NOT NULL,\
         stock FLOAT(12, 2) DEFAULT 0,\
@@ -43,7 +52,8 @@ const createTables = async () => {
         unit VARCHAR(30)  NOT NULL,\
         created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\
         category_id INT UNSIGNED,\
-        FOREIGN KEY (category_id) REFERENCES categories(category_id));"
+        FOREIGN KEY (category_id) REFERENCES categories(category_id)\
+        ON DELETE CASCADE);"
     );
 
     await createTable(
@@ -64,7 +74,8 @@ const createTables = async () => {
         product_id INT UNSIGNED,\
         quantity FLOAT(12, 2) DEFAULT 1,\
         FOREIGN KEY (order_id) REFERENCES orders(order_id),\
-        FOREIGN KEY (product_id) REFERENCES products(product_id));"
+        FOREIGN KEY (product_id) REFERENCES products(product_id)\
+        ON DELETE CASCADE);"
     );
     await createTable(
       "CREATE TABLE IF NOT EXISTS users (\

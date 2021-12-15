@@ -3,7 +3,7 @@ const { db, runQuery } = require("./db.js");
 const editTables = async () => {
   try {
     var query_text =
-      "ALTER TABLE orders\
+      "ALTER TABLE categories\
         change shiping_address shipping_address VARCHAR(200);";
 
     var params = [];

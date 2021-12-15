@@ -1,40 +1,16 @@
-const db = require("./db.js");
+const { db, runQuery } = require("./db.js");
 
 const dropTables = async () => {
   try {
-    // await db.query("DROP TABLE IF EXISTS users CASCADE;");
-    // await db.query("DROP TABLE IF EXISTS records CASCADE;");
-    db.query("DROP TABLE IF EXISTS ordered_items CASCADE;", (err, result) => {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log("ok1 " + result);
-      }
-    });
+    await runQuery("DROP TABLE IF EXISTS ordered_items CASCADE;", []);
+    await runQuery("DROP TABLE IF EXISTS orders CASCADE;", []);
+    await runQuery("DROP TABLE IF EXISTS products CASCADE;", []);
+    // await runQuery("DROP TABLE IF EXISTS categories CASCADE;", []);
+    // await runQuery("DROP TABLE IF EXISTS departments CASCADE;", []);
 
-    db.query("DROP TABLE IF EXISTS orders CASCADE;", (err, result) => {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log("ok2 " + result);
-      }
-    });
-
-    db.query("DROP TABLE IF EXISTS products CASCADE;", (err, result) => {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log("ok3 " + result);
-      }
-    });
-
-    db.query("DROP TABLE IF EXISTS categories CASCADE;", (err, result) => {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log("ok4 " + result);
-      }
-    });
+    console.log("====================================");
+    console.log("table deleted");
+    console.log("====================================");
     // db.query("DROP TABLE IF EXISTS admins CASCADE;", (err, result) => {
     //   if (err) {
     //     console.log(err);

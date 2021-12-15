@@ -58,12 +58,9 @@ const verifyPhoneNumber = async (code, confirmationResult) => {
 router.post("/phone_num", async (req, res) => {
   try {
     const confirmationResult = sendVerificationCodeToPhone(req.body.phone_num);
-    return res
-      .header("Access-Control-Allow-Origin", "*")
-      .status(201)
-      .json(confirmationResult);
+    return res.status(201).json(confirmationResult);
   } catch (error) {
-    res.header("Access-Control-Allow-Origin", "*").status(500).json(error);
+    res.status(500).json(error);
   }
 });
 
@@ -76,12 +73,9 @@ router.post("/verification_code", async (req, res) => {
     console.log("====================================");
     console.log(result);
     console.log("====================================");
-    return res
-      .header("Access-Control-Allow-Origin", "*")
-      .status(201)
-      .json(result);
+    return res.status(201).json(result);
   } catch (error) {
-    res.header("Access-Control-Allow-Origin", "*").status(500).json(error);
+    res.status(500).json(error);
   }
 });
 
@@ -108,19 +102,13 @@ router.post("/register", async (req, res) => {
 
     jwt.sign({ user: newUser }, process.env.SECRET_KEY, function (err, token) {
       newUser.token = token;
-      res.header("Access-Control-Allow-Origin", "*").status(201).json(newUser);
+      res.status(201).json(newUser);
     });
   } catch (error) {
     if (error.constraint) {
-      res
-        .header("Access-Control-Allow-Origin", "*")
-        .status(500)
-        .json({ error: error.constraint });
+      res.status(500).json({ error: error.constraint });
     }
-    return res
-      .header("Access-Control-Allow-Origin", "*")
-      .status(500)
-      .json(error);
+    return res.status(500).json(error);
   }
 });
 
@@ -135,10 +123,7 @@ router.post("/login", async (req, res) => {
     var user = await db.query(query_text, values);
 
     if (user.rowCount != 1) {
-      return res
-        .header("Access-Control-Allow-Origin", "*")
-        .status(404)
-        .json("User Not found");
+      return res.status(404).json("User Not found");
     }
 
     user = user.rows[0];
@@ -149,19 +134,16 @@ router.post("/login", async (req, res) => {
     );
 
     if (!validPassword) {
-      return res
-        .header("Access-Control-Allow-Origin", "*")
-        .status(403)
-        .json({ error: "wrong password" });
+      return res.status(403).json({ error: "wrong password" });
     }
 
     delete user["password"];
     jwt.sign({ user: user }, process.env.SECRET_KEY, function (err, token) {
       user.token = token;
-      res.header("Access-Control-Allow-Origin", "*").status(201).json(user);
+      res.status(201).json(user);
     });
   } catch (error) {
-    res.header("Access-Control-Allow-Origin", "*").status(500).json(error);
+    res.status(500).json(error);
   }
 });
 
@@ -176,10 +158,7 @@ router.post("/admin/login", async (req, res) => {
     var admin = await runQuery(query_text, values);
 
     if (admin.length != 1) {
-      return res
-        .header("Access-Control-Allow-Origin", "*")
-        .status(404)
-        .json("Admin Not found");
+      return res.status(404).json("Admin Not found");
     }
 
     admin = admin[0];
@@ -190,19 +169,16 @@ router.post("/admin/login", async (req, res) => {
     );
 
     if (!validPassword) {
-      return res
-        .header("Access-Control-Allow-Origin", "*")
-        .status(403)
-        .json({ error: "wrong password" });
+      return res.status(403).json({ error: "wrong password" });
     }
 
     delete admin["password"];
     jwt.sign({ admin: admin }, process.env.SECRET_KEY, function (err, token) {
       admin.token = token;
-      res.header("Access-Control-Allow-Origin", "*").status(201).json(admin);
+      res.status(201).json(admin);
     });
   } catch (error) {
-    res.header("Access-Control-Allow-Origin", "*").status(500).json(error);
+    res.status(500).json(error);
   }
 });
 module.exports = router;
