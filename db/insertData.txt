@@ -1,0 +1,28 @@
+1301
+Chicken Tandoori
+
+350
+1302
+Chicken Boti Kabab
+
+420
+1303
+Chicken Reshmi Kabab
+
+380
+1304
+Chicken Haryali kabab
+
+390
+1313
+Chicken Caap
+
+170
+704
+Beef Chap
+
+180
+1308
+Beef Boti Kabab
+
+420

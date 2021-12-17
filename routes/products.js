@@ -53,7 +53,6 @@ router.put("/:id", upload.single("image"), async (req, res) => {
         req.file.filename + req.file.originalname
       );
     }
-
     var query_text =
       "UPDATE products \
       SET title = ?, description = ?, code = ?, stock = ?, price = ?, buying_price = ?,unit = ?,image_url = ?\

@@ -4,7 +4,7 @@ const dropTables = async () => {
   try {
     await runQuery("DROP TABLE IF EXISTS ordered_items CASCADE;", []);
     await runQuery("DROP TABLE IF EXISTS orders CASCADE;", []);
-    await runQuery("DROP TABLE IF EXISTS products CASCADE;", []);
+    // await runQuery("DROP TABLE IF EXISTS products CASCADE;", []);
     // await runQuery("DROP TABLE IF EXISTS categories CASCADE;", []);
     // await runQuery("DROP TABLE IF EXISTS departments CASCADE;", []);
 

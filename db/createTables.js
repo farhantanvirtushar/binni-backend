@@ -4,7 +4,7 @@ const createTable = (query_text) =>
   new Promise((resolve, reject) => {
     db.getConnection((err, connection) => {
       if (err) {
-        console.error(err);
+        reject(err);
       }
 
       connection.query(query_text, (error, results) => {
@@ -63,8 +63,11 @@ const createTables = async () => {
         last_name VARCHAR(30)  NOT NULL,\
         shipping_address VARCHAR(200) NOT NULL,\
         contact_no VARCHAR(30)  NOT NULL,\
+        payment_account_no VARCHAR(30)  NOT NULL,\
         delivered BOOL DEFAULT 0,\
-        paid BOOL DEFAULT 0);"
+        confirmed BOOL DEFAULT 0,\
+        transaction_id VARCHAR(30),\
+        paid FLOAT(12, 2) DEFAULT 0);"
     );
 
     await createTable(

@@ -53,19 +53,21 @@ router.get("/:id/details", async (req, res) => {
 router.post("/new", async (req, res) => {
   try {
     var query_text =
-      "INSERT INTO orders (first_name,last_name,shipping_address,contact_no)\
-      VALUES(?,?,?,?);";
+      "INSERT INTO orders (first_name,last_name,shipping_address,contact_no,payment_account_no,transaction_id)\
+      VALUES(?,?,?,?,?,?);";
 
     var values = [
       req.body.first_name,
       req.body.last_name,
       req.body.shipping_address,
       req.body.contact_no,
+      req.body.payment_account_no,
+      req.body.transaction_id,
     ];
 
-    console.log("====================================");
-    console.log(values);
-    console.log("====================================");
+    // console.log("====================================");
+    // console.log(values);
+    // console.log("====================================");
     var result = await runQuery(query_text, values);
 
     var order_id = result.insertId;
@@ -80,9 +82,9 @@ router.post("/new", async (req, res) => {
       values.push(item);
     }
     values = [values];
-    console.log("====================================");
-    console.log(values);
-    console.log("====================================");
+    // console.log("====================================");
+    // console.log(values);
+    // console.log("====================================");
     await runQuery(query_text, values);
     return res.status(201).json({ msg: "order recieved" });
   } catch (error) {
