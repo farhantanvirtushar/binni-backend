@@ -53,14 +53,15 @@ router.get("/:id/details", async (req, res) => {
 router.post("/new", async (req, res) => {
   try {
     var query_text =
-      "INSERT INTO orders (first_name,last_name,shipping_address,contact_no,payment_account_no,transaction_id)\
-      VALUES(?,?,?,?,?,?);";
+      "INSERT INTO orders (first_name,last_name,shipping_address,contact_no,paid,payment_account_no,transaction_id)\
+      VALUES(?,?,?,?,?,?,?);";
 
     var values = [
       req.body.first_name,
       req.body.last_name,
       req.body.shipping_address,
       req.body.contact_no,
+      req.body.paid,
       req.body.payment_account_no,
       req.body.transaction_id,
     ];

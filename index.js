@@ -10,12 +10,13 @@ const departmentRouter = require("./routes/departments.js");
 const categoryRouter = require("./routes/categories.js");
 const productRouter = require("./routes/products.js");
 const orderRouter = require("./routes/orders.js");
+const cateringRouter = require("./routes/caterings");
 
-const createTables = require("./db/createTables.js");
+// const createTables = require("./db/createTables.js");
 
 dotenv.config();
 
-createTables();
+// createTables();
 
 app.use(express.urlencoded({ extended: true })); // for form data
 app.use(express.json()); // for json
@@ -52,4 +53,5 @@ app.use("/api/departments/", departmentRouter);
 app.use("/api/categories/", categoryRouter);
 app.use("/api/products/", productRouter);
 app.use("/api/orders/", orderRouter);
+app.use("/api/caterings/", cateringRouter);
 app.listen(process.env.PORT || 5000);

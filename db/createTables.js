@@ -81,6 +81,12 @@ const createTables = async () => {
         ON DELETE CASCADE);"
     );
     await createTable(
+      "CREATE TABLE IF NOT EXISTS caterings (\
+        catering_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,\
+        name VARCHAR(30)  NOT NULL,\
+        catering_menu VARCHAR(2000) NOT NULL);"
+    );
+    await createTable(
       "CREATE TABLE IF NOT EXISTS users (\
         user_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,\
         first_name VARCHAR(30)  NOT NULL,\
@@ -97,6 +103,9 @@ const createTables = async () => {
       username VARCHAR(30) UNIQUE NOT NULL,\
       password VARCHAR(80) NOT NULL );"
     );
+    console.log("====================================");
+    console.log("Table crated");
+    console.log("====================================");
   } catch (error) {
     console.log("error creating tables");
     console.log("====================================");
@@ -104,5 +113,7 @@ const createTables = async () => {
     console.log("====================================");
   }
 };
+
+createTables();
 
 module.exports = createTables;
