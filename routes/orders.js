@@ -6,7 +6,7 @@ const { v4: uuidv4 } = require("uuid");
 // change the path of json file
 
 var multer = require("multer");
-const upload = multer({ dest: "uploads/" });
+const upload = multer({ dest: "/tmp/uploads/" });
 
 const bcrypt = require("bcrypt");
 
@@ -14,7 +14,7 @@ const { db, runQuery } = require("../db/db.js");
 
 var jwt = require("jsonwebtoken");
 
-const storageRef = require("../firebase/firabaseinit.js");
+const uploadFile = require("../firebase/uploadFile");
 
 router.get("/", async (req, res) => {
   try {
@@ -34,12 +34,11 @@ router.get("/", async (req, res) => {
 router.get("/:id/details", async (req, res) => {
   try {
     var query_text =
-      "WITH orders AS\
-      (SELECT *\
+      "SELECT * \
+       FROM (SELECT *\
        FROM ordered_items\
-       WHERE order_id = ?)\
-       SELECT * \
-       FROM orders join products on (orders.product_id = products.product_id);";
+       WHERE order_id = ?) orders \
+       join products on (orders.product_id = products.product_id);";
 
     var values = [req.params.id];
 

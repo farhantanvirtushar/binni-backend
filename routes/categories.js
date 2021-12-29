@@ -6,7 +6,7 @@ const { v4: uuidv4 } = require("uuid");
 // change the path of json file
 
 var multer = require("multer");
-const upload = multer({ dest: "uploads/" });
+const upload = multer({ dest: "/tmp/uploads/" });
 
 const bcrypt = require("bcrypt");
 
@@ -14,19 +14,7 @@ const { db, runQuery } = require("../db/db.js");
 
 var jwt = require("jsonwebtoken");
 
-const storageRef = require("../firebase/firabaseinit.js");
-
-async function uploadFile(path, filename) {
-  const storage = await storageRef.upload(path, {
-    public: true,
-    destination: `/uploads/coverimages/${filename}`,
-    metadata: {
-      firebaseStorageDownloadTokens: uuidv4(),
-    },
-  });
-
-  return storage[0].metadata.mediaLink;
-}
+const uploadFile = require("../firebase/uploadFile");
 
 router.get("/", async (req, res) => {
   try {

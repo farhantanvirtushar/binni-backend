@@ -27,14 +27,14 @@ const createTables = async () => {
       "CREATE TABLE IF NOT EXISTS departments (\
         department_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,\
         name VARCHAR(30)  NOT NULL,\
-        department_image_url VARCHAR(200)  NOT NULL);"
+        department_image_url VARCHAR(400)  NOT NULL);"
     );
     await createTable(
       "CREATE TABLE IF NOT EXISTS categories (\
         category_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,\
         department_id INT UNSIGNED,\
         name VARCHAR(30)  NOT NULL,\
-        category_image_url VARCHAR(200)  NOT NULL,\
+        category_image_url VARCHAR(400)  NOT NULL,\
         FOREIGN KEY (department_id) REFERENCES departments(department_id)\
         ON DELETE CASCADE);"
     );
@@ -44,7 +44,7 @@ const createTables = async () => {
         product_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,\
         title VARCHAR(200)  NOT NULL,\
         code VARCHAR(20)  NOT NULL,\
-        image_url VARCHAR(200)  NOT NULL,\
+        image_url VARCHAR(400)  NOT NULL,\
         description VARCHAR(1500) NOT NULL,\
         stock FLOAT(12, 2) DEFAULT 0,\
         price FLOAT(12, 2) DEFAULT 0,\

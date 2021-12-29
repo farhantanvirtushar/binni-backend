@@ -7,11 +7,11 @@ try {
     connectTimeout: 60 * 60 * 1000,
     acquireTimeout: 60 * 60 * 1000,
     timeout: 60 * 60 * 1000,
-    host: "bhd1j95jzvvqriwqsl0u-mysql.services.clever-cloud.com",
+    host: "34.136.232.107",
     port: 3306,
-    user: "u1mrzzipdzd1kvub",
-    password: "7C9OFbkswj1wZStOSam4",
-    database: "bhd1j95jzvvqriwqsl0u",
+    user: "root",
+    password: "binniadmin777",
+    database: "binni_catering_database",
   });
 } catch (error) {
   console.log("====================================");

@@ -5,7 +5,7 @@ const router = express.Router();
 const { v4: uuidv4 } = require("uuid");
 
 var multer = require("multer");
-const upload = multer({ dest: "uploads/" });
+const upload = multer({ dest: "/tmp/uploads/" });
 
 const bcrypt = require("bcrypt");
 
@@ -13,19 +13,7 @@ const { db, runQuery } = require("../db/db.js");
 
 var jwt = require("jsonwebtoken");
 
-const storageRef = require("../firebase/firabaseinit.js");
-
-async function uploadFile(path, filename) {
-  const storage = await storageRef.upload(path, {
-    public: true,
-    destination: `/uploads/coverimages/${filename}`,
-    metadata: {
-      firebaseStorageDownloadTokens: uuidv4(),
-    },
-  });
-
-  return storage[0].metadata.mediaLink;
-}
+const uploadFile = require("../firebase/uploadFile");
 
 router.get("/:id", async (req, res) => {
   try {
@@ -48,6 +36,9 @@ router.put("/:id", upload.single("image"), async (req, res) => {
     var url = req.body.image_url;
     if (req.file) {
       // console.log("file found");
+      console.log("====================================");
+      console.log(req.file);
+      console.log("====================================");
       url = await uploadFile(
         req.file.path,
         req.file.filename + req.file.originalname

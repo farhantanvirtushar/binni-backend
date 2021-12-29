@@ -6,7 +6,7 @@ const { v4: uuidv4 } = require("uuid");
 // change the path of json file
 
 var multer = require("multer");
-const upload = multer({ dest: "uploads/" });
+const upload = multer({ dest: "/tmp/uploads/" });
 
 const bcrypt = require("bcrypt");
 
