@@ -44,6 +44,27 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+router.delete("/:id", async (req, res) => {
+  try {
+    var query_text =
+      "delete\
+      from departments\
+      where department_id = ?;";
+
+    var values = [req.params.id];
+
+    await runQuery(query_text, values);
+
+    query_text = "select *\
+      from departments;";
+
+    values = [];
+    var departments = await runQuery(query_text, values);
+    return res.status(201).json(departments);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
 router.get("/:id/all", async (req, res) => {
   try {
     var query_text =
