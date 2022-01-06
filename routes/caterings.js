@@ -119,25 +119,25 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-// router.delete("/:id", async (req, res) => {
-//   try {
-//     var query_text = "DELETE from categories\
-//       where category_id = ?;";
+router.delete("/:id", async (req, res) => {
+  try {
+    var query_text = "DELETE from caterings\
+      where catering_id = ?;";
 
-//     var values = [req.params.id];
+    var values = [req.params.id];
 
-//     var categories = await runQuery(query_text, values);
+    await runQuery(query_text, values);
 
-//     query_text = "select *\
-//       from categories;";
+    query_text = "select *\
+      from caterings;";
 
-//     values = [];
+    values = [];
 
-//     categories = await runQuery(query_text, values);
-//     return res.status(201).json(categories);
-//   } catch (error) {
-//     res.status(500).json(error);
-//   }
-// });
+    var caterings = await runQuery(query_text, values);
+    return res.status(201).json(caterings);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
 
 module.exports = router;
