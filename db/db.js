@@ -18,4 +18,21 @@ const runQuery = (query_text, params) => {
     });
 };
 
-module.exports = { db, runQuery };
+const insertRowWithLastId = (query_text, params) => {
+    return new Promise((resolve, reject) => {
+        db = new sqlite3.Database("./db/database.db");
+        db.run(query_text, params, function(error) {
+            if (error) {
+                console.log("====================================");
+                console.log(error);
+                console.log("====================================");
+                reject(error);
+            }
+
+            resolve(this.lastID);
+        });
+        db.close();
+    });
+};
+
+module.exports = { db, runQuery, insertRowWithLastId };

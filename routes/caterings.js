@@ -17,29 +17,29 @@ var jwt = require("jsonwebtoken");
 const storageRef = require("../firebase/firabaseinit.js");
 
 async function uploadFile(path, filename) {
-  const storage = await storageRef.upload(path, {
-    public: true,
-    destination: `/uploads/coverimages/${filename}`,
-    metadata: {
-      firebaseStorageDownloadTokens: uuidv4(),
-    },
-  });
+    const storage = await storageRef.upload(path, {
+        public: true,
+        destination: `/uploads/coverimages/${filename}`,
+        metadata: {
+            firebaseStorageDownloadTokens: uuidv4(),
+        },
+    });
 
-  return storage[0].metadata.mediaLink;
+    return storage[0].metadata.mediaLink;
 }
 
-router.get("/", async (req, res) => {
-  try {
-    var query_text = "select *\
+router.get("/", async(req, res) => {
+    try {
+        var query_text = "select *\
       from caterings;";
 
-    var values = [];
+        var values = [];
 
-    var caterings = await runQuery(query_text, values);
-    return res.status(201).json(caterings);
-  } catch (error) {
-    res.status(500).json(error);
-  }
+        var caterings = await runQuery(query_text, values);
+        return res.status(201).json(caterings);
+    } catch (error) {
+        res.status(500).json(error);
+    }
 });
 
 // router.get("/:id", async (req, res) => {
@@ -74,70 +74,70 @@ router.get("/", async (req, res) => {
 //   }
 // });
 
-router.post("/new", async (req, res) => {
-  try {
-    var query_text =
-      "INSERT INTO caterings (name,catering_menu)\
+router.post("/new", async(req, res) => {
+    try {
+        var query_text =
+            "INSERT INTO caterings (name,catering_menu)\
       VALUES(?,?);";
 
-    var values = [req.body.name, req.body.catering_menu];
+        var values = [req.body.name, req.body.catering_menu];
 
-    await runQuery(query_text, values);
+        await runQuery(query_text, values);
 
-    query_text = "select *\
+        query_text = "select *\
       from caterings;";
 
-    values = [];
+        values = [];
 
-    var caterings = await runQuery(query_text, values);
-    return res.status(201).json(caterings);
-  } catch (error) {
-    res.status(500).json(error);
-  }
+        var caterings = await runQuery(query_text, values);
+        return res.status(201).json(caterings);
+    } catch (error) {
+        res.status(500).json(error);
+    }
 });
 
-router.put("/:id", async (req, res) => {
-  try {
-    var query_text =
-      "UPDATE caterings \
+router.put("/:id", async(req, res) => {
+    try {
+        var query_text =
+            "UPDATE caterings \
       SET name = ?, catering_menu = ?\
       where catering_id = ?;";
 
-    var values = [req.body.name, req.body.catering_menu, req.params.id];
+        var values = [req.body.name, req.body.catering_menu, req.params.id];
 
-    await runQuery(query_text, values);
+        await runQuery(query_text, values);
 
-    query_text = "select *\
+        query_text = "select *\
       from caterings;";
 
-    values = [];
+        values = [];
 
-    var caterings = await runQuery(query_text, values);
-    return res.status(201).json(caterings);
-  } catch (error) {
-    res.status(500).json(error);
-  }
+        var caterings = await runQuery(query_text, values);
+        return res.status(201).json(caterings);
+    } catch (error) {
+        res.status(500).json(error);
+    }
 });
 
-router.delete("/:id", async (req, res) => {
-  try {
-    var query_text = "DELETE from caterings\
+router.delete("/:id", async(req, res) => {
+    try {
+        var query_text = "DELETE from caterings\
       where catering_id = ?;";
 
-    var values = [req.params.id];
+        var values = [req.params.id];
 
-    await runQuery(query_text, values);
+        await runQuery(query_text, values);
 
-    query_text = "select *\
+        query_text = "select *\
       from caterings;";
 
-    values = [];
+        values = [];
 
-    var caterings = await runQuery(query_text, values);
-    return res.status(201).json(caterings);
-  } catch (error) {
-    res.status(500).json(error);
-  }
+        var caterings = await runQuery(query_text, values);
+        return res.status(201).json(caterings);
+    } catch (error) {
+        res.status(500).json(error);
+    }
 });
 
 module.exports = router;

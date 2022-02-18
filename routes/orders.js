@@ -10,7 +10,7 @@ const upload = multer({ dest: "/tmp/uploads/" });
 
 const bcrypt = require("bcrypt");
 
-const { db, runQuery } = require("../db/db.js");
+const { db, runQuery, insertRowWithLastId } = require("../db/db.js");
 
 var jwt = require("jsonwebtoken");
 
@@ -68,9 +68,9 @@ router.post("/new", async(req, res) => {
         // console.log("====================================");
         // console.log(values);
         // console.log("====================================");
-        var result = await runQuery(query_text, values);
 
-        var order_id = result.insertId;
+        var order_id = await insertRowWithLastId(query_text, values);
+
         query_text =
             "INSERT INTO ordered_items (order_id,product_id,quantity)\
       VALUES (?,?,?);";
@@ -83,6 +83,9 @@ router.post("/new", async(req, res) => {
         }
         for (var i = 0; i < values.length; i++) {
             var value = values[i];
+            console.log("====================================");
+            console.log(value);
+            console.log("====================================");
 
             await runQuery(query_text, value);
         }
