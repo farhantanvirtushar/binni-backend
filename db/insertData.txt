@@ -1,28 +1,24 @@
-1301
-Chicken Tandoori
-
-350
-1302
-Chicken Boti Kabab
-
-420
-1303
-Chicken Reshmi Kabab
-
-380
-1304
-Chicken Haryali kabab
-
-390
-1313
-Chicken Caap
-
-170
-704
-Beef Chap
-
-180
-1308
-Beef Boti Kabab
-
-420
+521
+Soft Drinks
+20
+522
+Zira Pani
+80
+523
+Minaral Water
+15
+524
+Coffee Expro
+80
+525
+Cold Coffee
+150
+526
+Black Coffee
+80
+527
+Borhani
+50
+528
+Mixed Salad
+50
